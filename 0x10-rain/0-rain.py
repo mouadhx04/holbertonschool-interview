@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-a list of non-negative integers representing the heights of walls with unit width 1
+a list of (+) integers representing the heights of walls with unit width 1
 """
 
 
