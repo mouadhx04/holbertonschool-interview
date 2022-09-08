@@ -11,7 +11,7 @@ a list of positif integers representing the heights of walls with unit width 1
 def rain(walls):
     """
     Args:
-        walls - is a list of non-negative integers.
+        walls - is is a list of non-negative integers.
     Returns:
         If the list is empty return 0.
     """
