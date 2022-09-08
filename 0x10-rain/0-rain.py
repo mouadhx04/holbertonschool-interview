@@ -1,6 +1,10 @@
 #!/usr/bin/python3
 """
+<<<<<<< HEAD
 a list of (+) integers representing the heights of walls with unit width 1
+=======
+a list of positif integers representing the heights of walls with unit width 1
+>>>>>>> cd6ab373bbb8b8a80842eb2fb2fc74a3e4aad854
 """
 
 
