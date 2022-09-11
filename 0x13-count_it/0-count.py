@@ -1,50 +1,49 @@
 #!/usr/bin/python3
-"""  a recursive function that queries the Reddit API """
+"""
+a recursive function that queries the Reddit API,
+parses the title of all hot articles,
+and prints a sorted count of given keywords
+"""
 import requests
-from sys import argv
 
 
-def list_creator(hot_subreddits, posts, posts_len):
-    """ Creates a list"""
-    i = 0
-    while i < posts_len:
-        hot_subreddits.append(posts[i]['data']['title'])
-        i += 1
-    return (hot_subreddits)
+def count_words(subreddit, word_list):
+    """
+    a recursive function that queries the Reddit API,
+    parses the title of all hot articles,
+    and prints a sorted count of given keywords
+    """
+    r = requests.get('https://www.reddit.com/r/{}/hot/.json'.format(subreddit),
+                     headers={'User-agent': 'Chrome'})
+    data = {}
+    titles = []
+    counts = {}
+    for word in word_list:
+        if word not in counts:
+            counts[word] = 0
+    if r.status_code == 200:
+        children = r.json().get('data').get('children')
+        for item in children:
+            titles.append(item.get('data').get('title'))
+        for title in titles:
+            for k, v in counts.items():
+                copy = title[:]
+                cut = copy.lower().split(k.lower())
+                counts[k] += len(cut) - 1
+        duplicates = {}
+        for k in counts:
+            if counts[k] == 0:
+                pass
+            elif k.lower() in duplicates:
+                duplicates[k.lower()] += counts[k]
+            else:
+                duplicates[k.lower()] = counts[k]
+        sorted_values = sorted(duplicates.values(), reverse=True)
+        sorted_dict = {}
 
-
-def count_words(subreddit, word_list, hot_subreddits=[], after=None):
-    """ a recursive function that queries the Reddit API """
-
-    if len(argv) < 2:
-        return (None)
-
-    url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
-    header = {'User-Agent': 'python3:holberton.task:v1.0'}
-    payload = {'limit': '100', 'after': after}
-    request = requests.get(url, params=payload, headers=header)
-    if request.status_code == 200:
-        about = request.json()
-        posts = about['data']['children']
-        posts_len = len(posts)
-        if posts_len != 0:
-            (list_creator(hot_subreddits, posts, posts_len))
-        else:
-            None
-        after = about['data']['after']
-        if after is not None:
-            return (count_words(subreddit, word_list, hot_subreddits, after))
-        else:
-            count_dict = {}
-            for word in argv[2].split():
-                ocurrences = 0
-                for title in hot_subreddits:
-                    ocurrences += title.lower().count(word.lower())
-                if word.lower() not in count_dict.keys():
-                    count_dict[word.lower()] = ocurrences
-            count_sorted = sorted(count_dict, key=count_dict.get, reverse=True)
-            for key in count_sorted:
-                if count_dict[key] > 0:
-                    print("{}: {}".format(key, count_dict[key]))
-    else:
-        return None
+        for i in sorted_values:
+            for k in duplicates.keys():
+                if duplicates[k] == i:
+                    sorted_dict[k] = duplicates[k]
+        for i in sorted_dict.keys():
+            print("{}: {}".format(i, sorted_dict[i]))
