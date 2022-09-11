@@ -1,22 +1,28 @@
 #!/usr/bin/python3
-"""keywords titles of all hot articles"""
+"""
+0x13. Count it! - Write a recursive function that queries the Reddit API,
+                  parses the title of all hot articles, and prints a sorted
+                  count of given keywords (case-insensitive, delimited by
+                  spaces.
+                  Javascript should count as javascript, but java should not).
+"""
+
 import requests
 import sys
 
 
 def count_words(subreddit, word_list, kw_cont={}, next_pg=None, reap_kw={}):
     """all hot posts by keyword"""
-    headers = {"User-Agent": "julgachancipa"}
+    headers = {"User-Agent": "nildiert"}
 
     if next_pg:
-        subRhot = requests.get('https://reddit.com/r/' + subreddit +
-                               '/hot.json?after=' + next_pg,
-                               headers=headers)
+        subr = requests.get('https://reddit.com/r/' + subreddit +
+                            '/hot.json?after=' + next_pg, headers=headers)
     else:
-        subRhot = requests.get('https://reddit.com/r/' + subreddit +
-                               '/hot.json', headers=headers)
+        subr = requests.get('https://reddit.com/r/' + subreddit +
+                            '/hot.json', headers=headers)
 
-    if subRhot.status_code == 404:
+    if subr.status_code == 404:
         return
 
     if kw_cont == {}:
@@ -24,12 +30,12 @@ def count_words(subreddit, word_list, kw_cont={}, next_pg=None, reap_kw={}):
             kw_cont[word] = 0
             reap_kw[word] = word_list.count(word)
 
-    subRhot_dict = subRhot.json()
-    subRhot_data = subRhot_dict['data']
-    next_pg = subRhot_data['after']
-    subRhot_posts = subRhot_data['children']
+    subr_dict = subr.json()
+    subr_data = subr_dict['data']
+    next_pg = subr_data['after']
+    subr_posts = subr_data['children']
 
-    for post in subRhot_posts:
+    for post in subr_posts:
         post_data = post['data']
         post_title = post_data['title']
         title_words = post_title.split()
