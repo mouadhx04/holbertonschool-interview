@@ -1,28 +1,22 @@
 #!/usr/bin/python3
-"""
-0x13. Count it! - Write a recursive function that queries the Reddit API,
-                  parses the title of all hot articles, and prints a sorted
-                  count of given keywords key (case-insensitive, delimited by
-                  spaces.
-                  Javascript should count as javascript, but java should not).
-"""
-
+"""keywords titles of all hot articles"""
 import requests
 import sys
 
 
 def count_words(subreddit, word_list, kw_cont={}, next_pg=None, reap_kw={}):
     """all hot posts by keyword"""
-    headers = {"User-Agent": "nildiert"}
+    headers = {"User-Agent": "julgachancipa"}
 
     if next_pg:
-        subr = requests.get('https://reddit.com/r/' + subreddit +
-                            '/hot.json?after=' + next_pg, headers=headers)
+        subRhot = requests.get('https://reddit.com/r/' + subreddit +
+                               '/hot.json?after=' + next_pg,
+                               headers=headers)
     else:
-        subr = requests.get('https://reddit.com/r/' + subreddit +
-                            '/hot.json', headers=headers)
+        subRhot = requests.get('https://reddit.com/r/' + subreddit +
+                               '/hot.json', headers=headers)
 
-    if subr.status_code == 404:
+    if subRhot.status_code == 404:
         return
 
     if kw_cont == {}:
@@ -30,12 +24,12 @@ def count_words(subreddit, word_list, kw_cont={}, next_pg=None, reap_kw={}):
             kw_cont[word] = 0
             reap_kw[word] = word_list.count(word)
 
-    subr_dict = subr.json()
-    subr_data = subr_dict['data']
-    next_pg = subr_data['after']
-    subr_posts = subr_data['children']
+    subRhot_dict = subRhot.json()
+    subRhot_data = subRhot_dict['data']
+    next_pg = subRhot_data['after']
+    subRhot_posts = subRhot_data['children']
 
-    for post in subr_posts:
+    for post in subRhot_posts:
         post_data = post['data']
         post_title = post_data['title']
         title_words = post_title.split()
