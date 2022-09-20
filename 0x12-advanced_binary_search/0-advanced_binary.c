@@ -1,4 +1,4 @@
-#include "search_bin.h"
+#include "search_algos.h"
 
 /**
  * advanced_binary - searches for a value in a sorted array of integers
