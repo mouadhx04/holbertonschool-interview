@@ -1,1 +1,1 @@
-# 0x0C-nqueens
+# 0x0C-nqueens!
