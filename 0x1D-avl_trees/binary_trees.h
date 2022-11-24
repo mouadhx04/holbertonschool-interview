@@ -1,75 +1,33 @@
-#include "binary_trees.h"
+#ifndef BINARY_TREE_H
+#define BINARY_TREE_H
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stddef.h>
+#include <math.h>
+#include <limits.h>
 
 /**
- * binary_tree_is_avl - checks if a binary tree is an AVL tree
- * @tree: tree to check
+ * struct binary_tree_s - Binary tree node
  *
- * Return: 1 if avl tree, 0 otherwise
+ * @n: Integer stored in the node
+ * @parent: Pointer to the parent node
+ * @left: Pointer to the left child node
+ * @right: Pointer to the right child node
  */
-int binary_tree_is_avl(const binary_tree_t *tree)
+struct binary_tree_s
 {
-	if (bst(tree, INT_MIN, INT_MAX) && bal(tree))
-		return (1);
+    int n;
+    struct binary_tree_s *parent;
+    struct binary_tree_s *left;
+    struct binary_tree_s *right;
+};
 
-	return (0);
-}
+typedef struct binary_tree_s binary_tree_t;
+typedef struct binary_tree_s avl_t;
 
-/**
- * bal - checks if tree is balanced
- * @tree: tree to check
- *
- * Return: 1 if balanced, 0 otherwise
- */
-int bal(const binary_tree_t *tree)
-{
-	if (tree && (!tree->left || bal(tree->left)) &&
-	    (!tree->right || bal(tree->right)) &&
-	    (abs(height(tree->right) - height(tree->left)) <= 1))
-		return (1);
+void binary_tree_print(const binary_tree_t *);
+int binary_tree_is_avl(const binary_tree_t *tree);
+binary_tree_t *binary_tree_node(binary_tree_t *tree, int n);
 
-	return (0);
-}
-
-/**
- * bst - checks if binary tree is a BST tree
- * @tree: tree to check
- * @min: min value
- * @max: max value
- *
- * Return: 1 if BST tree, 0 otherwise
- */
-int bst(const binary_tree_t *tree, int min, int max)
-{
-	if (tree && (!tree->right || (tree->right->n > tree->n &&
-	    (tree->right->n < max || tree->right->n == INT_MAX) &&
-	    bst(tree->right, tree->n, max))) && (!tree->left  ||
-	    (tree->left->n < tree->n && (tree->left->n > min ||
-	    tree->left->n == INT_MIN) && bst(tree->left, min, tree->n))))
-		return (1);
-
-	return (0);
-}
-
-/**
- * height - gets height of binary tree
- * @tree: tree to check
- *
- * Return: height of tree
- */
-int height(const binary_tree_t *tree)
-{
-	int lh, rh;
-
-	if (tree)
-	{
-		lh = height(tree->left);
-		rh = height(tree->right);
-
-		if (rh > lh)
-			return (1 + rh);
-
-		return (1 + lh);
-	}
-
-	return (0);
-}
+#endif /* BINARY_TREE_H */
