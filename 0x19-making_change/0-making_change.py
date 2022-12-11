@@ -1,25 +1,28 @@
 #!/usr/bin/python3
-""" makechange challenge """
+""" Module that change comes from within.
+"""
 
 
 def makeChange(coins, total):
-    """
-    mkechange challenge
+    """ Method that determine the fewest number of coins needed
+        to meet a given amount total.
+        Args:
+            coins: Is a list of the values of the coins in your possession.
+            total: Total coins.
+        Return:
+            Fewest number of coins needed to meet total.
     """
 
     if total <= 0:
         return 0
-
-    coins.sort(reverse=True)
-    sum = 0
-    i = 0
+    if coins is None or coins == []:
+        return -1
+    coins = sorted(coins, reverse=True)
     counter = 0
-    num_coins = len(coins)
-    while sum < total and i < num_coins:
-        while coins[i] <= total - sum:
-            sum += coins[i]
-            counter += 1
-            if sum == total:
-                return counter
-        i += 1
+    for i in coins:
+        if i <= total:
+            counter += int(total / i)
+            total = total % i
+        if total == 0:
+            return counter
     return -1
