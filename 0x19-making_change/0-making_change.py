@@ -1,21 +1,18 @@
 #!/usr/bin/python3
-"""0x19-Making Change."""
+"""Making change"""
 
 
 def makeChange(coins, total):
-    """Change comes from within."""
-    pocketChange = 0
-    myCoins = 0
-    coins = reversed(sorted(coins))
-
+    """return the number of combinations"""
     if total <= 0:
-        return (0)
-
-    for coin in coins:
-        while pocketChange + coin <= total:
-            myCoins += 1
-            pocketChange += coin
-
-    if pocketChange != total:
-        return (-1)
-    return (myCoins)
+        return 0
+    dp = [float('inf')] * (total + 1)
+    dp[0] = 0
+    coins.sort()
+    for i in range(total + 1):
+        for coin in coins:
+            if coin > i:
+                break
+            if dp[i - coin] != -1:
+                dp[i] = min(dp[i - coin] + 1, dp[i])
+    return dp[total] if dp[total] != float('inf') else -1
