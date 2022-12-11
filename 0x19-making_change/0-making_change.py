@@ -1,28 +1,21 @@
 #!/usr/bin/python3
-""" Module that change comes from within.
-"""
+''' Find amount of coins that adds to a specific total '''
 
 
 def makeChange(coins, total):
-    """ Method that determine the fewest number of coins needed
-        to meet a given amount total.
-        Args:
-            coins: Is a list of the values of the coins in your possession.
-            total: Total coins.
-        Return:
-            Fewest number of coins needed to meet total.
-    """
-
-    if total <= 0:
+    ''' find num of coins that make the total '''
+    if (total <= 0):
         return 0
-    if coins is None or coins == []:
+    if total in coins:
+        return 1
+    numCoins = 0
+    currCoin = 0
+    coins = reversed(sorted(coins))
+
+    for coin in coins:
+        while currCoin + coin <= total:
+            numCoins += 1
+            currCoin += coin
+    if currCoin != total:
         return -1
-    coins = sorted(coins, reverse=True)
-    counter = 0
-    for i in coins:
-        if i <= total:
-            counter += int(total / i)
-            total = total % i
-        if total == 0:
-            return counter
-    return -1
+    return numCoins
